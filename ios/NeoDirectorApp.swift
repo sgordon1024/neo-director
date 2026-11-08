@@ -73,6 +73,7 @@ import UIKit
   core = core && !LocalPlan.preserves("four calm campsite shots with Frank",subject:"frank",style:"calm",count:3)
   core = core && !LocalPlan.preserves("follow my moving van",subject:"van",style:"dramatic",count:3)
   let vision=await inspectFixture()
+  let speech=await transcribeSyntheticFixture()
   var drafts:[[String:Any]]=[]
   for sample in ["Create four calm campsite shots with Frank.","Please make two dramatic compositions of my parked van.","Create a few campsite shots."] {
    request=sample;draft()
@@ -81,7 +82,7 @@ import UIKit
    drafts.append(["passed":passed,"status":status]);cancel()
   }
   let modelTest=drafts.allSatisfy{($0["passed"] as? Bool)==true}
-  let result:[String:Any]=["corePassed":core,"modelDraftPassed":modelTest,"draftCases":drafts,"modelStatus":status,"draftSubject":subject,"draftStyle":style,"draftCount":count,"scene":vision,"modelAvailable":modelAvailable,"flightTransport":false,"microphoneOpened":false,"networkClient":false]
+  let result:[String:Any]=["corePassed":core,"speechFixture":speech,"modelDraftPassed":modelTest,"draftCases":drafts,"modelStatus":status,"draftSubject":subject,"draftStyle":style,"draftCount":count,"scene":vision,"modelAvailable":modelAvailable,"flightTransport":false,"microphoneOpened":false,"networkClient":false]
   if let data=try? JSONSerialization.data(withJSONObject:result,options:[.prettyPrinted,.sortedKeys]),let dir=FileManager.default.urls(for:.documentDirectory,in:.userDomainMask).first {try? data.write(to:dir.appendingPathComponent("self-test.json"))}
  }
 }

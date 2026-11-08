@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T05:18:42.785434+00:00",
+  "verifiedAt": "2026-11-08T06:18:22.826692+00:00",
   "release": "native-brief-contract-14",
-  "evidence": "Native simulator model now preserves exact subject, mood and count for three synthetic briefs, including Frank, behind a bounded input/output contract. 166 native contract assertions and 97 existing tests pass. No microphone, physical iPhone or flight validation.",
+  "evidence": "Native structured/model/vision simulator checks remain passing. New generated-audio test found SpeechTranscriber unavailable in this iOS simulator runtime. Hands-free phone workflow is blocked on a supported runtime/device and explicit input-permission testing; no download or fallback attempted.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",

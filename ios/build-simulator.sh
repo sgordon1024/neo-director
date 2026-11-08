@@ -5,8 +5,9 @@ export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 SDK="$(xcrun --sdk iphonesimulator --show-sdk-path)"
 OUT="$PWD/.private/NeoDirector.app"
 mkdir -p "$OUT" "$PWD/.private/ios-module-cache"
-xcrun swiftc -parse-as-library -target arm64-apple-ios26.0-simulator -sdk "$SDK" -module-cache-path "$PWD/.private/ios-module-cache" ios/PlanCore.swift ios/NeoDirectorApp.swift -o "$OUT/NeoDirector"
+xcrun swiftc -parse-as-library -target arm64-apple-ios26.0-simulator -sdk "$SDK" -module-cache-path "$PWD/.private/ios-module-cache" ios/PlanCore.swift ios/SpeechFixture.swift ios/NeoDirectorApp.swift -o "$OUT/NeoDirector"
 cp fixtures/synthetic-campsite.png "$OUT/"
+/usr/bin/say -v Samantha -o "$OUT/synthetic-brief.aiff" "Create four calm campsite shots with Frank."
 cat > "$OUT/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

@@ -27,3 +27,7 @@ Physical installation/signing and actual iPhone compatibility, lifecycle, access
 Compile `ios/PlanCore.swift` and `ios/ContractTests.swift` with the installed Swift compiler and run the resulting local executable. 166 assertions cover four supported requests, every supported output-field combination for each request, and 18 unsupported or conflicting inputs. No microphone or device permission is needed.
 
 The guarded simulator model passed three end-to-end synthetic cases: four calm campsite shots with Frank, two dramatic parked-van compositions, and a default three-shot campsite brief. All returned fields matched the independent contract, with no proposal automatically started. This repairs the observed Frank omission for the tested case; it does not establish arbitrary conversational reliability or hands-free operation.
+
+## Simulator speech gate
+
+A generated Samantha-voice AIFF containing “Create four calm campsite shots with Frank” is bundled locally by the build script for self-testing only. The app checks installed on-device speech support before reading it. The current iOS Simulator reports `SpeechTranscriber.isAvailable == false`, so transcription was refused before processing. No asset download, permission request, microphone access or alternate/cloud recognizer was attempted. The same run retained passing structured, three model and synthetic Vision checks. Hands-free native phone operation is not verified. Existing Mini speech results do not establish iPhone availability.
