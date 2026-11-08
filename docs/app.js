@@ -1,0 +1,1 @@
+fetch('./status.json').then(r=>r.json()).then(s=>{document.querySelector('#verified').textContent=`Last verified: ${s.verifiedAt}. Evidence: ${s.evidence}`}).catch(()=>{document.querySelector('#verified').textContent='Verification record unavailable offline.'});
