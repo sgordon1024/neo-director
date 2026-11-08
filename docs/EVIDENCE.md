@@ -41,3 +41,6 @@ Verified 2026-11-08: 55 Node tests passed, including nine bridge checks for loop
 ## Phone session protocol model
 
 Verified 2026-11-08: 65 Node tests passed, including ten new pure in-memory protocol checks. The model rejects missing owner approval, missing secure-transport assertion, competing owners, expired/replaced/reused challenges, concurrent requests, clock rollback, stale-session replies and unreviewed proposals. All results remain review-only with actuation false. This model creates no credentials, performs no IO and is not connected to the bridge. PHONE-LINK.md records official browser/native API research and the exact remaining physical-test gates. No actual phone pairing, microphone, camera, headphone playback or network configuration was tested or changed.
+
+## Sparse video review integration
+Verified 2026-11-08T03:05:23.574902+00:00: 73 Node checks, prior native scene acceptance and the multi-frame synthetic native tests pass. The loopback browser upload was tested at 390 and 1280 px with actual Apple Vision output. A dog absent from the first half of the synthetic clip generated candidate bookmarks at 2.40 and 3.20 seconds. No identity/continuous tracking or flight-safety claim; no private footage or drone used. See MULTIFRAME-DRAFT.md for sparse-sampling limitations.

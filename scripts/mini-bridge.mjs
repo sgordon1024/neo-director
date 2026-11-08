@@ -7,6 +7,7 @@ import {execFile} from 'node:child_process';
 import {Director} from '../docs/director.js';
 import {spokenSummary,validateTranscript} from './local-director.mjs';
 import {sceneReview} from '../docs/scene-policy.js';
+import {reviewSampledVideo} from '../lib/video-review.js';
 const ROOT=dirname(dirname(fileURLToPath(import.meta.url)));
 const STATIC=new Set(['bridge.html','bridge.js','bridge.css']);
 class Failure extends Error{constructor(status,message){super(message);this.status=status;}}
@@ -37,10 +38,10 @@ export async function startBridge({port=8766,now=Date.now,root=ROOT,sessionMs=15
    if(path==='/api/plan'){const value=await jsonBody(req);ensureFresh(req);exact(value,['command']);if(typeof value.command!=='string'||value.command.length>500)throw new Failure(400,'Short command required');return send(200,{...director.request(value.command,now()),state:director.state,actuation:false});}
    if(path==='/api/simulation'){const value=await jsonBody(req);ensureFresh(req);exact(value,['action','telemetry']);if(!['start','step','stop'].includes(value.action)||!['fresh','stale','lost'].includes(value.telemetry))throw new Failure(400,'Unsupported simulation request');const sample={source:'synthetic',at:now()-(value.telemetry==='stale'?6000:0),link:value.telemetry==='lost'?'lost':'ready'};const result=value.action==='start'?director.start(sample,now()):value.action==='step'?director.tick(sample,now()):director.stop();return send(200,{...result,state:director.state,actuation:false});}
    if(path==='/api/speech'){const value=await jsonBody(req);ensureFresh(req);exact(value,['command']);if(typeof value.command!=='string'||value.command.length>500)throw new Failure(400,'Short command required');const audio=await job(async folder=>{const aiff=join(folder,'reply.aiff'),wav=join(folder,'reply.wav');await execute('/usr/bin/say',['-v','Samantha','-o',aiff,spokenSummary(value.command,now()).text]);await execute('/usr/bin/afconvert',[aiff,wav,'-f','WAVE','-d','LEI16']);const data=await readFile(wav);if(data.length>5_000_000)throw new Failure(413,'Generated audio too large');return data;});return send(200,audio,'audio/wav');}
-   if(['/api/transcribe','/api/scene/image','/api/scene/video'].includes(path)){
+   if(['/api/transcribe','/api/scene/image','/api/scene/video','/api/scene/video-sample'].includes(path)){
     if(req.headers['content-type']!=='application/octet-stream')throw new Failure(415,'Binary upload required');
     if(busy)throw new Failure(429,'Local inference busy; retry after it finishes');const bytes=await body(req,8_000_000);ensureFresh(req);if(!bytes.length)throw new Failure(400,'Empty media');
-    const result=await job(async folder=>{const input=join(folder,'input.media');await writeFile(input,bytes,{mode:0o600});if(path==='/api/transcribe'){const output=await execute(join(root,'.private','neo-media'),['transcribe',input]);return {transcript:validateTranscript(JSON.parse(output)),simulationStarted:false};}const kind=path.endsWith('/video')?'video':'image';const output=await execute(join(root,'.private','neo-scene'),[kind,input]);return {scene:sceneReview(JSON.parse(output)),commandsIssued:false};});return send(200,result);
+    const result=await job(async folder=>{const input=join(folder,path.startsWith('/api/scene/video')?'input.mov':'input.media');await writeFile(input,bytes,{mode:0o600});if(path==='/api/transcribe'){const output=await execute(join(root,'.private','neo-media'),['transcribe',input]);return {transcript:validateTranscript(JSON.parse(output)),simulationStarted:false};}const kind=path.endsWith('/video-sample')?'video-sample':path.endsWith('/video')?'video':'image';const output=await execute(join(root,'.private','neo-scene'),[kind,input]);return {scene:(kind==='video-sample'?reviewSampledVideo:sceneReview)(JSON.parse(output)),commandsIssued:false};});return send(200,result);
    }
    throw new Failure(404,'Unknown operation');
   }catch(error){req.resume();if(!res.headersSent)send(error instanceof Failure?error.status:500,{error:error instanceof Failure?error.message:'Local operation failed',actuation:false});else res.end();}
