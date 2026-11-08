@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T03:05:23.574902+00:00",
-  "release": "sparse-video-8",
-  "evidence": "Sparse video review verified end-to-end on the Mini using a synthetic late-appearing dog: bookmarks at 2.40 and 3.20 seconds. No Frank identity, continuous tracking, real-phone link or drone control.",
+  "verifiedAt": "2026-11-08T04:35:37.845888+00:00",
+  "release": "offline-briefs-9",
+  "evidence": "Bounded offline briefs accept everyday campsite/parked-van wording, 2\u20135 compositions, optional Frank inclusion at camp and natural/calm/dramatic framing. Templates, not an LLM. No phone link or drone control.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",

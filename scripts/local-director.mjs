@@ -8,7 +8,7 @@ const run=promisify(execFile);
 export function spokenSummary(command,now=Date.now()) {
  const intent=parseIntent(command);
  if(intent.kind!=='plan')return {accepted:false,text:intent.reason,kind:intent.kind};
- const plan=makePlan(intent.subject,now);
+ const plan=makePlan(intent.subject,now,intent.brief);
  return {accepted:true,plan,text:`Simulation proposal only. ${plan.title}. ${plan.shots.map(s=>s.composition).join('. ')}. No drone command has been sent. Review the proposal before simulation.`};
 }
 export function validateObservation(value){

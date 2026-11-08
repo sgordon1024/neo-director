@@ -44,3 +44,8 @@ Verified 2026-11-08: 65 Node tests passed, including ten new pure in-memory prot
 
 ## Sparse video review integration
 Verified 2026-11-08T03:05:23.574902+00:00: 73 Node checks, prior native scene acceptance and the multi-frame synthetic native tests pass. The loopback browser upload was tested at 390 and 1280 px with actual Apple Vision output. A dog absent from the first half of the synthetic clip generated candidate bookmarks at 2.40 and 3.20 seconds. No identity/continuous tracking or flight-safety claim; no private footage or drone used. See MULTIFRAME-DRAFT.md for sparse-sampling limitations.
+
+## Bounded offline briefs
+Verified November 8, 2026: all 79 Node tests pass. Everyday campsite and explicitly parked-van requests support 2–5 compositions and natural/calm/dramatic framing. Requested Frank inclusion is never recognition evidence; a generic dog is not silently labeled Frank. Unknown details, unsupported counts, mixed subjects, negation and conflicting styles ask for clarification. Flight requests remain refused; the independent supervisor checks the exact resulting brief and compositions.
+
+Local headless Chrome checks at 390 and 1280 pixels verified five calm camp compositions with Frank, two dramatic parked-van compositions, unsupported-detail clarification and moving-van refusal, including offline reload. Existing timeline, simulator and companion browser checks also pass without console errors or horizontal overflow. Microphone and physical-phone/headphone capture were not used. This is a deterministic phrase-and-slot interpreter with templates, not a local LLM or general conversation.
