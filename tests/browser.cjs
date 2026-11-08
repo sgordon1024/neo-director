@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});const base=process.env.BASE_URL||'http://127.0.0.1:8765/';const checks=[];
 for(const width of [390,1280]){
  const context=await browser.newContext({viewport:{width,height:844}});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
- await page.goto(base);await page.waitForFunction(()=>document.querySelector('#offline').textContent.startsWith('Offline cache ready'));
+ await page.goto(base+"studio.html");await page.waitForFunction(()=>document.querySelector('#offline').textContent.startsWith('Offline cache ready'));
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);checks.push(`${width}px: no horizontal overflow`);
  await page.getByRole('button',{name:'Include Frank',exact:true}).click();assert.match(await page.locator('#output').innerText(),/proposed/);
  await page.getByRole('button',{name:'Start simulation',exact:true}).click();for(let i=0;i<3;i++)await page.getByRole('button',{name:'Next simulated shot',exact:true}).click();assert.match(await page.locator('#output').innerText(),/complete/);

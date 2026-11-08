@@ -6,7 +6,7 @@ A working, dependency-free typed cinematography director prototype. It produces 
 
 ## Try it
 
-Open the tracker online once and wait for “Offline cache ready.” Reload once, then disconnect. The cached app can propose and simulate shots offline in browsers supporting service workers. Browser eviction, private browsing and first visits without internet can prevent caching. A cached verification timestamp may be older than the live site.
+Open the tracker, then select Open studio. Visit online once and wait for “Offline cache ready.” Reload once, then disconnect. The cached app can propose and simulate shots offline in browsers supporting service workers. Browser eviction, private browsing and first visits without internet can prevent caching. A cached verification timestamp may be older than the live site.
 
 Supported requests:
 
@@ -27,7 +27,7 @@ node --test tests/*.test.js
 python3 -m http.server 8765 --bind 127.0.0.1 --directory docs
 ```
 
-Open `http://127.0.0.1:8765`. For browser tests, point `PLAYWRIGHT_MODULE` to an existing trusted Playwright installation and `CHROME_PATH` to an existing Chrome executable, then run `node tests/browser.cjs`. Set `BASE_URL` to test a deployed site. No runtime or model was installed for this project.
+Open `http://127.0.0.1:8765`. For browser tests, point `PLAYWRIGHT_MODULE` to an existing trusted Playwright installation and `CHROME_PATH` to an existing Chrome executable, then run `node tests/browser.cjs` and `node tests/timeline.cjs`. Set `BASE_URL` to test a deployed site. No runtime or model was installed for this project.
 
 ## What this is building toward
 

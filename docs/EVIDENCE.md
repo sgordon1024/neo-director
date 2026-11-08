@@ -17,3 +17,7 @@ GitHub Pages build 1350428902 reported `built` for commit `c6affbc598cda91ae98b9
 Reproduce with README instructions. Browser test fixtures are synthetic equatorial coordinates, not actual travel locations. Screenshots and private local paths are not published.
 
 Deployment of the prototype must be verified against GitHub Pages' reported commit and exact asset bytes before it is claimed delivered. See GitHub's Pages deployment/build history for the current deployment commit.
+
+## Timeline redesign verification
+
+Verified 2026-11-08: six colored stage links, two factual milestone markers, keyboard activation, all six detail pages and project notes available offline, and the simulator retained on studio.html. Headless Chrome checks at 390 × 844 and 1280 × 844 passed with no horizontal overflow or console errors. Both responsive layouts were captured; the mobile timeline was visually reviewed. The original simulator browser suite also passed after moving it to the studio page.
