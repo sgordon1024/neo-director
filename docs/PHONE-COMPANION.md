@@ -26,3 +26,5 @@ The companion currently has no phone-to-Mini connection. A separate loopback int
 A native scene JSON may be selected manually for local review. Do not share personal scene files through public issues or commits. Files up to 100 KB are accepted; schema and score bounds are validated. Imported labels are rendered as text and never supplied to the command parser.
 
 [Browser local voice distinction](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisVoice/localService), [local recognition availability](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition/available_static), [processLocally](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition/processLocally).
+
+See [PHONE-LINK.md](PHONE-LINK.md) for the tested protocol model, capability research and remaining connection gates.

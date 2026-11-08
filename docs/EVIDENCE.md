@@ -37,3 +37,7 @@ Verified 2026-11-08: 46 Node tests passed. Five added native scene checks passed
 ## Loopback Mini integration
 
 Verified 2026-11-08: 55 Node tests passed, including nine bridge checks for loopback binding, Host/Origin rejection, session token and expiry, stale/future/replayed request rejection, body-arrival freshness, schema and upload limits, no-actuation state changes, concurrency and cleanup. Real local inference browser checks passed at 390px and 1280px, including native transcription, explicit review/proposal, synthetic stale rejection, completed simulation, WAV decode without playback, scene review and unsafe refusal. All request-owned temporary media was removed. This is a same-Mac loopback test, not a phone-to-Mini network test.
+
+## Phone session protocol model
+
+Verified 2026-11-08: 65 Node tests passed, including ten new pure in-memory protocol checks. The model rejects missing owner approval, missing secure-transport assertion, competing owners, expired/replaced/reused challenges, concurrent requests, clock rollback, stale-session replies and unreviewed proposals. All results remain review-only with actuation false. This model creates no credentials, performs no IO and is not connected to the bridge. PHONE-LINK.md records official browser/native API research and the exact remaining physical-test gates. No actual phone pairing, microphone, camera, headphone playback or network configuration was tested or changed.

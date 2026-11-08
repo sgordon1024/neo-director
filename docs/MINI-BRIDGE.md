@@ -71,3 +71,5 @@ node tests/bridge-browser.cjs
 ```
 
 The browser test uses existing Chrome/Playwright and the synthetic fixtures produced by earlier native tests. It does not play audio or open a microphone. Set BRIDGE_URL only to an authorized loopback test instance. The public preview is checked separately by tests/bridge-preview.cjs.
+
+See [PHONE-LINK.md](PHONE-LINK.md) for the tested protocol model, capability research and remaining connection gates.

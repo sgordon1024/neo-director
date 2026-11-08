@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T02:44:05.473123+00:00",
-  "release": "loopback-bridge-6",
-  "evidence": "55 Node tests and real loopback inference UI checks passed at mobile/desktop widths. Native media remained review-only; no microphone, playback, LAN or drone connection used.",
+  "verifiedAt": "2026-11-08T02:51:38.308504+00:00",
+  "release": "phone-protocol-7",
+  "evidence": "Phone session protocol model: 10 checks passed for ownership, expiry, replay, disconnect races and review-only results. Phone transport and real device capture remain unimplemented.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",
