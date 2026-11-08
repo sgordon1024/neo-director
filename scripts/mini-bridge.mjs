@@ -10,7 +10,7 @@ import {spokenSummary,validateTranscript} from './local-director.mjs';
 import {sceneReview} from '../docs/scene-policy.js';
 import {reviewSampledVideo} from '../lib/video-review.js';
 const ROOT=dirname(dirname(fileURLToPath(import.meta.url)));
-const STATIC=new Set(['bridge.html','bridge.js','bridge.css']);
+const STATIC=new Set(['bridge.html','bridge.js','bridge.css','video-bookmarks.js']);
 class Failure extends Error{constructor(status,message){super(message);this.status=status;}}
 function exact(value,keys){if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).sort().join(',')!==[...keys].sort().join(','))throw new Failure(400,'Unsupported request schema');}
 async function body(req,limit){const parts=[];let size=0;if(Number(req.headers['content-length'])>limit)throw new Failure(413,'Input too large');for await(const part of req){size+=part.length;if(size>limit)throw new Failure(413,'Input too large');parts.push(part);}return Buffer.concat(parts);}

@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {videoBookmarks} from '../docs/video-bookmarks.js';
+const hash='a'.repeat(64),fixture=()=>({schema:2,mode:'video-sample-observation-only',sourceSHA256:hash,safetyAssessment:'unknown',requiresHumanReview:true,actuation:false,durationSeconds:4,frames:[{sourceSHA256:hash,frameTimeSeconds:0},{sourceSHA256:hash,frameTimeSeconds:2.4}],dogCandidates:[{frameTimeSeconds:2.4,score:.8}]});
+test('bookmarks are human review labels, not identity or actuation',()=>assert.deepEqual(videoBookmarks(fixture(),hash),[{time:0,label:'Sample · 0.00 s'},{time:2.4,label:'Dog candidate · 2.40 s'}]));
+test('different local media hash rejects report',()=>assert.throws(()=>videoBookmarks(fixture(),'b'.repeat(64))));
+test('invalid, duplicate, reversed and out-of-range sample times rejected',()=>{for(const time of [0,-1,NaN,5]){const r=fixture();r.frames[1].frameTimeSeconds=time;assert.throws(()=>videoBookmarks(r,hash));}});
+test('candidate must match actual reviewed sample',()=>{const r=fixture();r.dogCandidates[0].frameTimeSeconds=3;assert.throws(()=>videoBookmarks(r,hash));});
+test('review boundaries and source provenance required',()=>{for(const r of [{...fixture(),actuation:true},{...fixture(),safetyAssessment:'safe'},{...fixture(),requiresHumanReview:false},{...fixture(),frames:[]}])assert.throws(()=>videoBookmarks(r,hash));const r=fixture();r.frames[0].sourceSHA256='b'.repeat(64);assert.throws(()=>videoBookmarks(r,hash));});

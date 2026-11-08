@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T04:41:32.598112+00:00",
-  "release": "local-model-10",
-  "evidence": "Installed Apple on-device language model now drafts review-only briefs on the Mini. Three synthetic paraphrases and desktop/mobile browser flows passed. Public companion remains deterministic; no phone link or flight control.",
+  "verifiedAt": "2026-11-08T04:45:54.678569+00:00",
+  "release": "visual-review-11",
+  "evidence": "Local video review now links native sample timestamps to a hash-matched, paused recording preview. Synthetic late-dog clip tested at phone/desktop widths. No identity inference, phone link or flight control.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",
