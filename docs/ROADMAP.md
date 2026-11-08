@@ -2,9 +2,9 @@
 
 | Phase | State | Exit evidence |
 | --- | --- | --- |
-| 0. Inventory and audit | In progress | Bounded source audit complete; physical hardware and field connectivity unverified |
+| 0. Inventory and audit | In progress | Bounded source audit complete; Mini host specifications verified; iPhone/headphones, bridge and field connectivity unverified |
 | 1. Typed offline prototype | Completed | Structured proposals, fail-closed supervisor, simulated sequence, local GPX, automated unit and browser tests |
-| 1b. Headphone conversation | Planned | Local speech/vision runtime, private recorded fixtures, latency and offline tests; no models running today |
+| 1b. Headphone conversation | In progress | Native speech output and recorded-media statistics verified; transcription assets and OCR blocked; iPhone/headphones not integrated |
 | 2. Grounded observation | Planned | Approved read-only bridge evaluation, video lineage, timestamped telemetry; no motor operations |
 | 3. Safety validation | Blocked | Independently prove landing and stopped motors, physical/manual takeover, stale telemetry rejection and lost-link behavior |
 | 4. Campsite shots | Blocked | All prior gates pass; supervised bounded proposals, safe distance from people and Frank |

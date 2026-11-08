@@ -21,3 +21,7 @@ Deployment of the prototype must be verified against GitHub Pages' reported comm
 ## Timeline redesign verification
 
 Verified 2026-11-08: six colored stage links, two factual milestone markers, keyboard activation, all six detail pages and project notes available offline, and the simulator retained on studio.html. Headless Chrome checks at 390 × 844 and 1280 × 844 passed with no horizontal overflow or console errors. Both responsive layouts were captured; the mobile timeline was visually reviewed. The original simulator browser suite also passed after moving it to the studio page.
+
+## Local media baseline
+
+Verified 2026-11-08: 33 Node tests passed. Six native checks passed: synthetic still dimensions/statistics; synthetic video frame and luminance; invalid image refusal; oversized-file refusal; installed voice output to a local audio file; unavailable transcription-model refusal with no cloud fallback. Spoken proposal wrapper and private video-observation wrapper also ran successfully. See LOCAL-MEDIA.md for limitations. Native speech recognition and OCR are not claimed verified.

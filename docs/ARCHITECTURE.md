@@ -34,3 +34,7 @@ Headphones ↔ iPhone companion ↔ local speech on Mini
 Speech, vision, model runtime, companion app and bridge are planned only. The Mini stays in the van, which limits local connectivity on trails. Offline operation requires locally available models and data, not cloud ChatGPT. No cloud joystick or arbitrary model-generated code execution is allowed. Recognition is not obstacle avoidance.
 
 Grounded read-only video and telemetry must come before actuation. Any transport integration changes this architecture's risk and requires separate review and physical/manual takeover. A ground watchdog cannot guarantee stopping after radio loss.
+
+## Native media baseline
+
+`native/Media.swift` reads bounded local media. Default image/video operations return dimensions and grayscale statistics, not model-generated scene descriptions. `scripts/local-director.mjs` generates proposal-only summaries using the same strict intent grammar and writes local audio with the installed system voice. It filters observations before saving them privately, discarding OCR text and command-like fields. Speech recognition remains behind an installed-asset gate. Optional OCR is experimental and not part of the working pipeline. All native operations have bounded process timeouts. See LOCAL-MEDIA.md for exact evidence and limitations.

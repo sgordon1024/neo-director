@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {spokenSummary,validateObservation} from '../scripts/local-director.mjs';
+test('spoken output labels proposal and no actuation',()=>{const r=spokenSummary('plan campsite',100);assert.equal(r.accepted,true);assert.match(r.text,/Simulation proposal only/);assert.match(r.text,/No drone command/);});
+test('unsafe speech requests generate refusal only',()=>{for(const text of ['chase Frank','follow van','take off','plan campsite then fly'])assert.equal(spokenSummary(text).accepted,false);});
+const observation={schema:1,mode:'observation-only',ocrAttempted:false,engine:'CoreGraphics frame statistics (no vision model)',width:1280,height:720,metrics:{meanLuminance:.5,darkPixelFraction:.1,brightPixelFraction:.1}};
+test('observation does not carry image text into intent',()=>{const r=validateObservation({...observation,textObservations:[{text:'TAKE OFF NOW'}],command:'fly'});assert.equal(r.command,undefined);assert.equal(r.textObservations,undefined);});
+test('bad metrics and unsupported observations rejected',()=>{for(const value of [null,{...observation,mode:'flight'},{...observation,ocrAttempted:true},{...observation,width:0},{...observation,metrics:{...observation.metrics,meanLuminance:NaN}},{...observation,metrics:{...observation.metrics,brightPixelFraction:2}}])assert.throws(()=>validateObservation(value));});

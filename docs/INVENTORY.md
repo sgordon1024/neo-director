@@ -1,7 +1,11 @@
-# Inventory boundary
+# Hardware inventory
 
-Verified read-only in the development environment: ARM64 macOS host, existing Node.js v24.21.0, Python 3.9.6, Chrome and bundled Playwright. No runtime installation was needed. Existing authorized GitHub access can create repositories and publish branch-based Pages; it cannot push Actions workflow files with its current OAuth scope.
+Read-only verification on 2026-11-08: the host reports a Mac mini with Apple silicon, 16 GB memory and 12 logical CPU cores. Approximately 212 GiB storage was available at inspection. Existing Node.js v24.21.0, Python 3.9.6, Swift 6.4.2, Chrome and bundled Playwright were used. Apple system frameworks provide the tested local audio output and media decoding/statistics. No new runtime was installed.
 
-Not verified: physical Mini model and RAM, available field storage, offline model performance, iPhone model/OS, headphone microphone routing, drone ownership/firmware/controller, Linux bridge availability, radio adapters, field range, battery or power budget. A sandbox restricted the model/RAM query; it is not needed for the typed prototype.
+Public records intentionally omit hardware serial numbers, platform IDs, accounts, private paths and network identities. No van services, network configuration, security settings or audio routing were changed.
 
-Before model selection, privately confirm Mini compute/memory and iPhone/headphone capabilities. Before any bridge work, confirm dedicated Linux hardware and radio coexistence without changing the van's services. Keep device identifiers, routes, accounts and credentials out of this public repository. No hardware purchases are part of this task.
+Not verified: iPhone model/OS, headphone microphone routing, Linux bridge hardware/radio adapters, drone/controller/firmware, field range, power/battery budget, installed model suitability and end-to-end conversation latency. The host's self-reported specifications are not evidence about other field hardware.
+
+The existing GitHub authentication can publish branch-based Pages, but cannot push workflow files with its current OAuth scope. No authentication changes were needed.
+
+See [local media evidence](LOCAL-MEDIA.md) for actual tests and current model blockers. No hardware purchases are part of this phase.

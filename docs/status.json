@@ -1,11 +1,11 @@
 {
-  "verifiedAt": "2026-11-08T02:05:27.421799+00:00",
-  "release": "timeline-2",
-  "evidence": "29 unit tests; mobile and desktop timeline navigation, stage details and simulator checked offline with zero console errors.",
+  "verifiedAt": "2026-11-08T02:11:24.832155+00:00",
+  "release": "local-media-baseline-3",
+  "evidence": "33 Node tests and six synthetic native-media checks passed. Responsive timeline and browser offline behavior verified. Speech recognition and model-based vision remain unverified.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",
-    "speechVision": "planned",
+    "speechVision": "in-progress",
     "realFlight": "blocked"
   }
 }
