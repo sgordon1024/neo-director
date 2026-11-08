@@ -21,7 +21,7 @@ Microphone recognition is allowed only if the browser supports processLocally, r
 
 Open the companion online once to cache it. Typing is available offline afterward. To test microphone input, the owner must explicitly choose the in-page consent and browser permission on the actual device. If installed local recognition cannot be verified, keep using typing. Do not enable cloud dictation as a workaround.
 
-The companion currently has no phone-to-Mini connection. Testing an authenticated local Mini link would require a separately reviewed connection design and explicit consent before LAN exposure, certificate trust, pairing or network/security changes. No such changes occurred in this milestone.
+The companion currently has no phone-to-Mini connection. A separate loopback integration lab now connects a same-Mac browser to native inference and simulation; see MINI-BRIDGE.md. Testing an authenticated local Mini link would require a separately reviewed connection design and explicit consent before LAN exposure, certificate trust, pairing or network/security changes. No such changes occurred in this milestone.
 
 A native scene JSON may be selected manually for local review. Do not share personal scene files through public issues or commits. Files up to 100 KB are accepted; schema and score bounds are validated. Imported labels are rendered as text and never supplied to the command parser.
 

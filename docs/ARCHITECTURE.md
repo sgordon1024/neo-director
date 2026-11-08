@@ -44,3 +44,7 @@ Grounded read-only video and telemetry must come before actuation. Any transport
 The static companion runs the strict planner on the phone/browser itself; there is no connection to the Mini. Browser microphone input requires explicit user consent and a verified installed on-device recognition pack, and it fills a review field without submitting. Speech output selects a local-service voice only. These voice paths have mocked browser coverage, not real iPhone/headphone verification.
 
 The native scene tool adds Apple image classification and animal candidates, tied to a file hash and optional frame time. It emits unknown safety and mandatory human review. The companion can import a bounded scene JSON locally; labels are rendered as text and never enter command parsing. No route, identity or obstacle-safety inference is allowed.
+
+## Loopback inference integration
+
+`mini-bridge.mjs` serves a separate integration UI on 127.0.0.1 only. Short-lived in-memory tokens, same-origin/Host checks, replay IDs, freshness checks, strict operation schemas, bounded uploads and a single inference lane protect the simulation interface. Native media is request-scoped and removed after processing. Actual phone networking requires a new authenticated HTTPS pairing/ownership design and owner approval; the current local bootstrap must not be exposed to the LAN. See MINI-BRIDGE.md for contract, tests and remaining gates.

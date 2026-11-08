@@ -33,3 +33,7 @@ Verified 2026-11-08: 37 Node tests and 14 native checks passed. Five generated s
 ## Companion and recorded-scene prototype
 
 Verified 2026-11-08: 46 Node tests passed. Five added native scene checks passed on the generated still, its locally encoded video and a text-card negative fixture. The existing 14 native speech/OCR checks remain covered by their suite. Phone-layout browser tests passed at 390px and 1280px, including offline typed proposals, local scene review, mocked speech-consent and voice-selection behavior, no overflow and zero console errors. Actual browser microphone and audio playback were not invoked. Unmocked headless Chrome had zero local synthesis voices. Real iPhone/headphone operation and a phone-to-Mini link remain unverified. See PHONE-COMPANION.md, SCENE-REVIEW.md and fixtures/README.md.
+
+## Loopback Mini integration
+
+Verified 2026-11-08: 55 Node tests passed, including nine bridge checks for loopback binding, Host/Origin rejection, session token and expiry, stale/future/replayed request rejection, body-arrival freshness, schema and upload limits, no-actuation state changes, concurrency and cleanup. Real local inference browser checks passed at 390px and 1280px, including native transcription, explicit review/proposal, synthetic stale rejection, completed simulation, WAV decode without playback, scene review and unsafe refusal. All request-owned temporary media was removed. This is a same-Mac loopback test, not a phone-to-Mini network test.

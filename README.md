@@ -6,6 +6,8 @@ A working, dependency-free typed cinematography director prototype. It produces 
 
 [Open the field companion](https://sgordon1024.github.io/neo-director/companion.html) for a phone-friendly typed conversation, local-only voice checks and scene-note review. Actual iPhone/headphone audio remains unverified.
 
+[Mini integration lab](docs/MINI-BRIDGE.md) now connects the browser review flow to real local speech/scene inference and simulation on loopback only. Actual phone-to-Mini networking remains gated.
+
 ## Try it
 
 Open the tracker, then select Open studio. Visit online once and wait for “Offline cache ready.” Reload once, then disconnect. The cached app can propose and simulate shots offline in browsers supporting service workers. Browser eviction, private browsing and first visits without internet can prevent caching. A cached verification timestamp may be older than the live site.

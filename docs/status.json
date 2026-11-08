@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T02:30:34.098390+00:00",
-  "release": "companion-scene-5",
-  "evidence": "46 Node tests, native recognition/scene checks and mobile/desktop offline UI checks passed. Browser voice tests use mocks; real iPhone/headphone audio and scene field accuracy remain unverified.",
+  "verifiedAt": "2026-11-08T02:44:05.473123+00:00",
+  "release": "loopback-bridge-6",
+  "evidence": "55 Node tests and real loopback inference UI checks passed at mobile/desktop widths. Native media remained review-only; no microphone, playback, LAN or drone connection used.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",
