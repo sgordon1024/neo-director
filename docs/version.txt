@@ -1,1 +1,1 @@
-offline-briefs-9
+local-model-10

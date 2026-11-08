@@ -4,7 +4,8 @@ import {readFile,writeFile,mkdir,mkdtemp,rm,access} from 'node:fs/promises';
 import {join,dirname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {execFile} from 'node:child_process';
-import {Director} from '../docs/director.js';
+import {Director,parseIntent} from '../docs/director.js';
+import {validateModelDraft} from '../lib/model-brief.js';
 import {spokenSummary,validateTranscript} from './local-director.mjs';
 import {sceneReview} from '../docs/scene-policy.js';
 import {reviewSampledVideo} from '../lib/video-review.js';
@@ -31,10 +32,11 @@ export async function startBridge({port=8766,now=Date.now,root=ROOT,sessionMs=15
    if(req.method==='GET'&&path==='/api/session'){
     if(now()>expiresAt)throw new Failure(401,'Session expired; restart the local bridge');
     const available=async name=>{try{await access(join(root,'.private',name));return true;}catch{return false;}};
-    return send(200,{mode:'simulation-only',token,expiresAt,capabilities:{transcription:await available('neo-media'),scene:await available('neo-scene')},networkScope:'127.0.0.1 only'});
+    return send(200,{mode:'simulation-only',token,expiresAt,capabilities:{transcription:await available('neo-media'),scene:await available('neo-scene'),brief:await available('neo-brief')},networkScope:'127.0.0.1 only'});
    }
    if(req.method==='GET'&&!path.startsWith('/api/')){const file=path==='/'?'bridge.html':path.slice(1);if(!STATIC.has(file))throw new Failure(404,'Not found');const data=await readFile(join(root,'docs',file));return send(200,data,file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8');}
    if(req.method!=='POST')throw new Failure(405,'Method not allowed');authorize(req);
+   if(path==='/api/brief'){const value=await jsonBody(req);ensureFresh(req);exact(value,['command']);if(typeof value.command!=='string'||!value.command.trim()||value.command.length>500||parseIntent(value.command).kind==='refuse')throw new Failure(400,'Unsupported or flight-related request');if(director.state==='simulating')throw new Failure(409,'Stop simulation before drafting a new brief');director.stop();const result=await job(async()=>validateModelDraft(JSON.parse(await execute(join(root,'.private','neo-brief'),[value.command])),value.command));return send(200,result);}
    if(path==='/api/plan'){const value=await jsonBody(req);ensureFresh(req);exact(value,['command']);if(typeof value.command!=='string'||value.command.length>500)throw new Failure(400,'Short command required');return send(200,{...director.request(value.command,now()),state:director.state,actuation:false});}
    if(path==='/api/simulation'){const value=await jsonBody(req);ensureFresh(req);exact(value,['action','telemetry']);if(!['start','step','stop'].includes(value.action)||!['fresh','stale','lost'].includes(value.telemetry))throw new Failure(400,'Unsupported simulation request');const sample={source:'synthetic',at:now()-(value.telemetry==='stale'?6000:0),link:value.telemetry==='lost'?'lost':'ready'};const result=value.action==='start'?director.start(sample,now()):value.action==='step'?director.tick(sample,now()):director.stop();return send(200,{...result,state:director.state,actuation:false});}
    if(path==='/api/speech'){const value=await jsonBody(req);ensureFresh(req);exact(value,['command']);if(typeof value.command!=='string'||value.command.length>500)throw new Failure(400,'Short command required');const audio=await job(async folder=>{const aiff=join(folder,'reply.aiff'),wav=join(folder,'reply.wav');await execute('/usr/bin/say',['-v','Samantha','-o',aiff,spokenSummary(value.command,now()).text]);await execute('/usr/bin/afconvert',[aiff,wav,'-f','WAVE','-d','LEI16']);const data=await readFile(wav);if(data.length>5_000_000)throw new Failure(413,'Generated audio too large');return data;});return send(200,audio,'audio/wav');}

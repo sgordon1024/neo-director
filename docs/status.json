@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T04:35:37.845888+00:00",
-  "release": "offline-briefs-9",
-  "evidence": "Bounded offline briefs accept everyday campsite/parked-van wording, 2\u20135 compositions, optional Frank inclusion at camp and natural/calm/dramatic framing. Templates, not an LLM. No phone link or drone control.",
+  "verifiedAt": "2026-11-08T04:41:32.598112+00:00",
+  "release": "local-model-10",
+  "evidence": "Installed Apple on-device language model now drafts review-only briefs on the Mini. Three synthetic paraphrases and desktop/mobile browser flows passed. Public companion remains deterministic; no phone link or flight control.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",
