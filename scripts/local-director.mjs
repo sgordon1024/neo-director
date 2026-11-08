@@ -5,11 +5,14 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {parseIntent,makePlan} from '../docs/director.js';
 const run=promisify(execFile);
+export function spokenPlanSummary(plan){
+ if(!plan||JSON.stringify(plan)!==JSON.stringify(makePlan(plan.subject,plan.createdAt,plan.brief)))throw Error('Invalid reviewed plan');
+ return {accepted:true,plan,text:`Simulation proposal only. ${plan.title}. ${plan.shots.map(s=>s.composition).join('. ')}. No drone command has been sent. Review the proposal before simulation.`};
+}
 export function spokenSummary(command,now=Date.now()) {
  const intent=parseIntent(command);
  if(intent.kind!=='plan')return {accepted:false,text:intent.reason,kind:intent.kind};
- const plan=makePlan(intent.subject,now,intent.brief);
- return {accepted:true,plan,text:`Simulation proposal only. ${plan.title}. ${plan.shots.map(s=>s.composition).join('. ')}. No drone command has been sent. Review the proposal before simulation.`};
+ return spokenPlanSummary(makePlan(intent.subject,now,intent.brief));
 }
 export function validateObservation(value){
  if(!value||value.schema!==1||value.mode!=='observation-only'||typeof value.ocrAttempted!=='boolean'||value.engine!==(value.ocrAttempted?'Apple Vision OCR + grayscale statistics':'CoreGraphics frame statistics (no vision model)')||!value.metrics)throw Error('Unsupported observation');

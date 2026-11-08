@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T04:45:54.678569+00:00",
-  "release": "visual-review-11",
-  "evidence": "Local video review now links native sample timestamps to a hash-matched, paused recording preview. Synthetic late-dog clip tested at phone/desktop widths. No identity inference, phone link or flight control.",
+  "verifiedAt": "2026-11-08T04:50:47.603149+00:00",
+  "release": "context-revisions-12",
+  "evidence": "Offline follow-up edits now preserve the current brief across count, framing style and Frank inclusion changes. Chained edits and reload clearing tested in mobile/desktop browser; Mini generates revised spoken proposal without playback. No phone link or flight.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",

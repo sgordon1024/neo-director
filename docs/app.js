@@ -1,10 +1,11 @@
 import {Director} from './director.js';
+import {conversationRequest} from './conversation.js';
 import {parseGPX,distance,remaining} from './route.js';
 const director=new Director();
 const output=document.querySelector('#output');
 const show=result=>{output.textContent=JSON.stringify({state:director.state,...result},null,2);};
 const sample=()=>({source:'synthetic',at:Date.now()-(document.querySelector('#stale').checked?6000:0),link:'ready'});
-document.querySelector('#command-form').addEventListener('submit',e=>{e.preventDefault();show(director.request(document.querySelector('#command').value,Date.now()));});
+document.querySelector('#command-form').addEventListener('submit',e=>{e.preventDefault();show(conversationRequest(director,document.querySelector('#command').value,Date.now()));});
 document.querySelector('#start').onclick=()=>show(director.start(sample(),Date.now()));
 document.querySelector('#step').onclick=()=>show(director.tick(sample(),Date.now()));
 document.querySelector('#stop').onclick=()=>show(director.stop());
