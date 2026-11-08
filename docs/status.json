@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T02:19:05.925154+00:00",
-  "release": "local-recognition-4",
-  "evidence": "37 Node tests and 14 native checks passed. On-device synthetic speech and still/video OCR verified; iPhone/headphones and scene understanding remain planned.",
+  "verifiedAt": "2026-11-08T02:30:34.098390+00:00",
+  "release": "companion-scene-5",
+  "evidence": "46 Node tests, native recognition/scene checks and mobile/desktop offline UI checks passed. Browser voice tests use mocks; real iPhone/headphone audio and scene field accuracy remain unverified.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",

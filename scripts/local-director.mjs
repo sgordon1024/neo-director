@@ -1,3 +1,4 @@
+import {sceneReview} from '../docs/scene-policy.js';
 import {pathToFileURL} from 'node:url';
 import {writeFile,mkdir} from 'node:fs/promises';
 import {execFile} from 'node:child_process';
@@ -39,12 +40,18 @@ export async function main(args){
    const result=validateTranscript(JSON.parse(stdout));
    await mkdir('.private',{recursive:true});await writeFile('.private/last-transcript.json',JSON.stringify(result,null,2));
    console.log(JSON.stringify({saved:'.private/last-transcript.json',requiresTypedReview:true,simulationStarted:false}));
+ }else if(command==='scene'){
+   if(args.length!==3||!['image','video'].includes(args[1]))throw Error('Usage: scene image|video LOCAL_FILE');
+   const {stdout}=await run('.private/neo-scene',[args[1],args[2]],{timeout:22000,maxBuffer:1024*1024});
+   const result=sceneReview(JSON.parse(stdout));
+   await mkdir('.private',{recursive:true});await writeFile('.private/last-scene.json',JSON.stringify(result,null,2));
+   console.log(JSON.stringify({saved:'.private/last-scene.json',requiresHumanReview:true,safetyAssessment:'unknown',commandsIssued:false}));
  }else if(command==='inspect'){
    if(args.length!==3||!['image','video','ocr','video-ocr'].includes(args[1]))throw Error('Usage: inspect image|video|ocr|video-ocr LOCAL_FILE');
    const {stdout}=await run('.private/neo-media',[args[1],args[2]],{timeout:15000,maxBuffer:1024*1024});
    const observation=validateObservation(JSON.parse(stdout));
    await mkdir('.private',{recursive:true});await writeFile('.private/last-observation.json',JSON.stringify(observation,null,2));
    console.log(JSON.stringify({saved:'.private/last-observation.json',mode:'observation-only',ocrPerformed:args[1].includes('ocr'),commandsIssued:false}));
- }else throw Error('Use plan, speak, transcribe or inspect. No microphone, cloud or drone connection.');
+ }else throw Error('Use plan, speak, transcribe, inspect or scene. No microphone, cloud or drone connection.');
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)main(process.argv.slice(2)).catch(e=>{console.error(e.message);process.exitCode=1;});

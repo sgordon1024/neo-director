@@ -1,8 +1,10 @@
 # Neo Director
 
-[Open the progress tracker and offline simulator](https://sgordon1024.github.io/neo-director/)
+[Open the progress tracker and offline tools](https://sgordon1024.github.io/neo-director/)
 
 A working, dependency-free typed cinematography director prototype. It produces structured proposals, runs a step-based simulated shot sequence, refuses unsafe or ambiguous requests, and calculates local GPX route length. It cannot connect to or control a drone.
+
+[Open the field companion](https://sgordon1024.github.io/neo-director/companion.html) for a phone-friendly typed conversation, local-only voice checks and scene-note review. Actual iPhone/headphone audio remains unverified.
 
 ## Try it
 
@@ -31,7 +33,7 @@ Open `http://127.0.0.1:8765`. For browser tests, point `PLAYWRIGHT_MODULE` to an
 
 ## What this is building toward
 
-Headphones and an iPhone communicate with local speech, vision and shot planning on a Mini in the van. That is a future integration. No speech recognition model, vision model, LLM, iPhone companion or headphone interface is running in the browser. Separate native tools now transcribe synthetic recorded speech on-device, read text from still/video frames and write local spoken summaries. See [local media](docs/LOCAL-MEDIA.md) for tested capabilities and remaining limits. This prototype uses a strict deterministic grammar, not general conversation. It is separate from cloud ChatGPT, whose voice service is not promised offline. Van-based local radio range limits trail use.
+Headphones and an iPhone communicate with local speech, vision and shot planning on a Mini in the van. That is a future integration. No speech recognition model, vision model, LLM, iPhone companion or headphone interface is running in the browser. Separate native tools now transcribe synthetic recorded speech on-device, read text from still/video frames and write local spoken summaries. See [local media](docs/LOCAL-MEDIA.md), [phone companion](docs/PHONE-COMPANION.md) and [scene review](docs/SCENE-REVIEW.md) for tested capabilities and remaining limits. This prototype uses a strict deterministic grammar, not general conversation. It is separate from cloud ChatGPT, whose voice service is not promised offline. Van-based local radio range limits trail use.
 
 DJI lists Neo 2 as not SDK-compatible. The experimental Linux client is a research lead, not a DJI Fly plugin or a proven safety system. No third-party drone software was executed. No drone radio, flight, motors, firmware, vehicle service, security or network configuration was changed.
 

@@ -29,3 +29,7 @@ Verified 2026-11-08: 33 Node tests passed. Six native checks passed: synthetic s
 ## Recognition milestone: earlier blockers resolved
 
 Verified 2026-11-08: 37 Node tests and 14 native checks passed. Five generated speech cases exercised three proposals, takeoff refusal and ambiguous-intent clarification. Still and first-frame video OCR extracted both synthetic labels while keeping command-like text observation-only. Transcription and video OCR also passed in a temporary test-process sandbox denying network access; system services were not separately network-isolated. No download or cloud fallback was used. The prior asset-status gate and OCR timeout are resolved as described in LOCAL-MEDIA.md. Actual headphone/iPhone, noisy speech, semantic scene understanding and field tests remain unverified.
+
+## Companion and recorded-scene prototype
+
+Verified 2026-11-08: 46 Node tests passed. Five added native scene checks passed on the generated still, its locally encoded video and a text-card negative fixture. The existing 14 native speech/OCR checks remain covered by their suite. Phone-layout browser tests passed at 390px and 1280px, including offline typed proposals, local scene review, mocked speech-consent and voice-selection behavior, no overflow and zero console errors. Actual browser microphone and audio playback were not invoked. Unmocked headless Chrome had zero local synthesis voices. Real iPhone/headphone operation and a phone-to-Mini link remain unverified. See PHONE-COMPANION.md, SCENE-REVIEW.md and fixtures/README.md.

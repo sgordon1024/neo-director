@@ -38,3 +38,9 @@ Grounded read-only video and telemetry must come before actuation. Any transport
 ## Native media baseline
 
 `native/Media.swift` reads bounded local media. Default image/video operations return dimensions and grayscale statistics, not model-generated scene descriptions. `scripts/local-director.mjs` generates proposal-only summaries using the same strict intent grammar and writes local audio with the installed system voice. It validates observations before saving them privately, keeping recognized text in an explicit review-only field and discarding command fields. Speech recognition requires verified local asset readiness and returns a transcript requiring explicit review. Still and video OCR run on a detached worker to avoid blocking the main actor. Neither transcript nor OCR automatically enters the planner or starts simulation. All native operations have bounded process timeouts. See LOCAL-MEDIA.md for exact evidence and limitations.
+
+## Companion and scene review
+
+The static companion runs the strict planner on the phone/browser itself; there is no connection to the Mini. Browser microphone input requires explicit user consent and a verified installed on-device recognition pack, and it fills a review field without submitting. Speech output selects a local-service voice only. These voice paths have mocked browser coverage, not real iPhone/headphone verification.
+
+The native scene tool adds Apple image classification and animal candidates, tied to a file hash and optional frame time. It emits unknown safety and mandatory human review. The companion can import a bounded scene JSON locally; labels are rendered as text and never enter command parsing. No route, identity or obstacle-safety inference is allowed.
