@@ -41,3 +41,7 @@ Apple distinguishes native local-network operations from Safari traffic. Do not 
 ## Next physical-test gate
 
 Review the exact existing network, proposed listener and certificate trust method with the owner before enabling a phone-accessible service. Then verify pairing/revocation, airplane-mode local connectivity, phone codecs, microphone consent cancellation, track shutdown, headphone interruptions, lock-screen behavior and out-of-range disconnects with synthetic inputs first. This milestone does not prove trail range. A ground connection watchdog cannot guarantee drone stopping after radio loss; this project still has no drone transport.
+
+## Native alternative prototype
+
+An unsigned phone-local simulator prototype now exists. Structured planning and a synthetic animal observation work without a Mini link. Local-model constraint preservation is not yet reliable. See [simulator evidence and remaining gates](IOS-PROTOTYPE.md). This is not a physical-phone release.
