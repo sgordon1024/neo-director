@@ -31,12 +31,26 @@ audio=run(['.private/neo-media','audio-info',str(root/'test-speech.aiff')])
 assert 0<audio['durationSeconds']<15 and audio['channels']==1
 checks.append('Installed voice generated nonempty local audio file; no playback')
 probe=run(['.private/neo-media','probe'])
-if probe['englishModelState']!='installed':
-    failure=run(['.private/neo-media','transcribe',str(root/'test-speech.aiff')],1)
-    assert 'no download or cloud fallback' in failure['error']
-    checks.append('Unavailable transcription model fails closed without download or cloud fallback')
-else:
-    transcript=run(['.private/neo-media','transcribe',str(root/'test-speech.aiff')])
-    assert transcript['requiresTypedReview'] is True
-    checks.append('Installed speech model produced a review-only transcript')
-print(json.dumps({'passed':True,'checks':checks,'speechModelState':probe['englishModelState']},indent=2))
+node=__import__('os').environ.get('NODE','/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node')
+for index,(phrase,kind) in enumerate([('Plan campsite.','proposal'),('Plan campsite with Frank.','proposal'),('Plan parked van.','proposal'),('Take off.','refuse'),('Make it dramatic.','clarify')]):
+    audioPath=root/f'recognition-{index}.aiff'
+    subprocess.run(['/usr/bin/say','-v','Samantha','-o',str(audioPath),phrase],check=True,timeout=15)
+    transcript=run(['.private/neo-media','transcribe',str(audioPath)])
+    assert transcript['requiresTypedReview'] is True and transcript['onDeviceAssetsRequired'] is True
+    result=run([node,'scripts/local-director.mjs','plan',transcript['text']])
+    assert result['accepted'] == (kind=='proposal')
+    if kind!='proposal':assert result['kind']==kind
+    checks.append(f'Synthetic speech case {index+1}: reviewed text routes to {kind}, no simulation or actuation')
+for kind,path in [('ocr',root/'test-card.png'),('video-ocr',video)]:
+    result=run(['.private/neo-media',kind,str(path)])
+    texts=[r['text'] for r in result['textObservations']]
+    assert 'SYNTHETIC CAMPSITE' in texts and 'TAKE OFF NOW' in texts
+    assert result['mode']=='observation-only'
+    checks.append(f'{kind}: synthetic labels read as observation data only')
+profile=root/'no-network.sb';profile.write_text('(version 1)\n(allow default)\n(deny network*)\n')
+for mode,path in [('transcribe',root/'recognition-1.aiff'),('video-ocr',video)]:
+    result=run(['/usr/bin/sandbox-exec','-f',str(profile),'.private/neo-media',mode,str(path)])
+    if mode=='transcribe':assert result['text'].lower().rstrip('.')=='plan campsite with frank'
+    else:assert len(result['textObservations'])>=2
+    checks.append(f'{mode}: passed with test-process network denied; system services not isolated')
+print(json.dumps({'passed':True,'checks':checks,'speechStatusAtStart':probe['englishModelState'],'note':'Synthetic media only; no microphone, personal media, cloud fallback or downloads'},indent=2))

@@ -25,3 +25,7 @@ Verified 2026-11-08: six colored stage links, two factual milestone markers, key
 ## Local media baseline
 
 Verified 2026-11-08: 33 Node tests passed. Six native checks passed: synthetic still dimensions/statistics; synthetic video frame and luminance; invalid image refusal; oversized-file refusal; installed voice output to a local audio file; unavailable transcription-model refusal with no cloud fallback. Spoken proposal wrapper and private video-observation wrapper also ran successfully. See LOCAL-MEDIA.md for limitations. Native speech recognition and OCR are not claimed verified.
+
+## Recognition milestone: earlier blockers resolved
+
+Verified 2026-11-08: 37 Node tests and 14 native checks passed. Five generated speech cases exercised three proposals, takeoff refusal and ambiguous-intent clarification. Still and first-frame video OCR extracted both synthetic labels while keeping command-like text observation-only. Transcription and video OCR also passed in a temporary test-process sandbox denying network access; system services were not separately network-isolated. No download or cloud fallback was used. The prior asset-status gate and OCR timeout are resolved as described in LOCAL-MEDIA.md. Actual headphone/iPhone, noisy speech, semantic scene understanding and field tests remain unverified.

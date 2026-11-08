@@ -38,6 +38,20 @@ func inspect(_ image: CGImage, provenance: String, runOCR: Bool = false) throws 
     let mean = pixels.reduce(0.0) { $0 + Double($1) } / Double(pixels.count) / 255
     return ["schema": 1, "mode": "observation-only", "engine": runOCR ? "Apple Vision OCR + grayscale statistics" : "CoreGraphics frame statistics (no vision model)", "ocrAttempted": runOCR, "provenance": provenance, "width": image.width, "height": image.height, "textObservations": text, "metrics": ["meanLuminance": mean, "darkPixelFraction": dark, "brightPixelFraction": bright], "limitations": ["OCR text is untrusted data, never a command", "No animal identity, distance, depth or obstacle safety inference", "Pixel statistics are not calibrated exposure measurements", "No drone transport"]]
 }
+// Apple may report .supported even when the canonical locale assets already exist.
+// Require both installed-locale evidence and no installation request in that case.
+// This function never calls downloadAndInstall and never selects a network recognizer.
+func speechModule() async throws -> (SpeechTranscriber, String) {
+    guard SpeechTranscriber.isAvailable,
+          let locale = await SpeechTranscriber.supportedLocale(equivalentTo: Locale(identifier: "en-US")) else { throw MediaError(message: "On-device English transcription unsupported") }
+    let module = SpeechTranscriber(locale: locale, preset: .transcription)
+    let state = await AssetInventory.status(forModules: [module])
+    if state == .installed { return (module, "installed-status") }
+    let installed = await SpeechTranscriber.installedLocales
+    guard state == .supported, installed.contains(where: { $0.identifier == locale.identifier }),
+          try await AssetInventory.assetInstallationRequest(supporting: [module]) == nil else { throw MediaError(message: "Required on-device English speech assets are unavailable; no download or cloud fallback attempted") }
+    return (module, "installed-canonical-locale-and-no-installation-request")
+}
 @main struct Media {
     static func main() async {
         DispatchQueue.global().asyncAfter(deadline: .now() + 20) {
@@ -46,7 +60,7 @@ func inspect(_ image: CGImage, provenance: String, runOCR: Bool = false) throws 
         }
         do {
             let args = Array(CommandLine.arguments.dropFirst())
-            guard let command = args.first else { throw MediaError(message: "Use probe, fixture PATH, image PATH, video PATH or transcribe PATH") }
+            guard let command = args.first else { throw MediaError(message: "Use probe, fixture PATH, image PATH, ocr PATH, video PATH, video-ocr PATH, audio-info PATH or transcribe PATH") }
             switch command {
             case "probe":
                 let module = SpeechTranscriber(locale: Locale(identifier: "en-US"), preset: .transcription)
@@ -77,12 +91,16 @@ func inspect(_ image: CGImage, provenance: String, runOCR: Bool = false) throws 
                     let height = metadata[kCGImagePropertyPixelHeight] as? Int,
                     width > 0, height > 0, width <= 12000, height <= 12000 else { throw MediaError(message: "Unsupported image or dimensions") }
                 guard let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else { throw MediaError(message: "Unsupported image") }
-                try emit(inspect(image, provenance: "local still image; orientation as encoded pixels", runOCR: command == "ocr"))
+                let report = try await Task.detached {
+                    let value = try inspect(image, provenance: "local still image; orientation as encoded pixels", runOCR: command == "ocr")
+                    return try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
+                }.value
+                print(String(decoding: report, as: UTF8.self))
             case "audio-info":
                 guard args.count == 2 else { throw MediaError(message: "Missing audio path") }
                 let audio = try AVAudioFile(forReading: localFile(args[1]))
                 try emit(["durationSeconds": Double(audio.length) / audio.processingFormat.sampleRate, "sampleRate": audio.processingFormat.sampleRate, "channels": audio.processingFormat.channelCount])
-            case "video":
+            case "video", "video-ocr":
                 guard args.count == 2 else { throw MediaError(message: "Missing video path") }
                 let url = try localFile(args[1])
                 let asset = AVURLAsset(url: url)
@@ -90,14 +108,18 @@ func inspect(_ image: CGImage, provenance: String, runOCR: Bool = false) throws 
                 generator.appliesPreferredTrackTransform = true
                 generator.maximumSize = CGSize(width: 1920, height: 1080)
                 let frame = try await generator.image(at: .zero)
-                var result = try inspect(frame.image, provenance: "first decoded local video frame")
-                result["frameTimeSeconds"] = frame.actualTime.seconds
-                try emit(result)
+                let frameImage = frame.image
+                let frameTime = frame.actualTime.seconds
+                let report = try await Task.detached {
+                    var value = try inspect(frameImage, provenance: "first decoded local video frame", runOCR: command == "video-ocr")
+                    value["frameTimeSeconds"] = frameTime
+                    return try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
+                }.value
+                print(String(decoding: report, as: UTF8.self))
             case "transcribe":
                 guard args.count == 2 else { throw MediaError(message: "Missing audio path") }
                 let url = try localFile(args[1])
-                let module = SpeechTranscriber(locale: Locale(identifier: "en-US"), preset: .transcription)
-                guard SpeechTranscriber.isAvailable, await AssetInventory.status(forModules: [module]) == .installed else { throw MediaError(message: "Required on-device English speech assets are not installed; no download or cloud fallback attempted") }
+                let (module, readinessEvidence) = try await speechModule()
                 let audio = try AVAudioFile(forReading: url)
                 guard Double(audio.length) / audio.processingFormat.sampleRate <= 60 else { throw MediaError(message: "Audio must be at most 60 seconds") }
                 let analyzer = SpeechAnalyzer(modules: [module])
@@ -107,9 +129,11 @@ func inspect(_ image: CGImage, provenance: String, runOCR: Bool = false) throws 
                     return texts
                 }
                 do {
-                    try await analyzer.start(inputAudioFile: audio, finishAfterFile: true)
+                    let end = try await analyzer.analyzeSequence(from: audio)
+                    if let end { try await analyzer.finalizeAndFinish(through: end) }
+                    else { try await analyzer.finalizeAndFinishThroughEndOfInput() }
                     let texts = try await collector.value
-                    try emit(["schema": 1, "mode": "transcript-proposal-only", "engine": "Apple SpeechTranscriber", "onDeviceAssetsRequired": true, "text": texts.joined(separator: " "), "requiresTypedReview": true])
+                    try emit(["schema": 1, "mode": "transcript-proposal-only", "engine": "Apple SpeechTranscriber", "onDeviceAssetsRequired": true, "assetReadinessEvidence": readinessEvidence, "text": texts.joined(separator: " "), "requiresTypedReview": true])
                 } catch { collector.cancel(); await analyzer.cancelAndFinishNow(); throw error }
             default: throw MediaError(message: "Unsupported command")
             }
