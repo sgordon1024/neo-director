@@ -1,1 +1,15 @@
-fetch('./status.json').then(r=>r.json()).then(s=>{document.querySelector('#verified').textContent=`Last verified: ${s.verifiedAt}. Evidence: ${s.evidence}`}).catch(()=>{document.querySelector('#verified').textContent='Verification record unavailable offline.'});
+import {Director} from './director.js';
+import {parseGPX,distance,remaining} from './route.js';
+const director=new Director();
+const output=document.querySelector('#output');
+const show=result=>{output.textContent=JSON.stringify({state:director.state,...result},null,2);};
+const sample=()=>({source:'synthetic',at:Date.now()-(document.querySelector('#stale').checked?6000:0),link:'ready'});
+document.querySelector('#command-form').addEventListener('submit',e=>{e.preventDefault();show(director.request(document.querySelector('#command').value,Date.now()));});
+document.querySelector('#start').onclick=()=>show(director.start(sample(),Date.now()));
+document.querySelector('#step').onclick=()=>show(director.tick(sample(),Date.now()));
+document.querySelector('#stop').onclick=()=>show(director.stop());
+document.querySelectorAll('[data-command]').forEach(b=>b.onclick=()=>{document.querySelector('#command').value=b.dataset.command;show(director.request(b.dataset.command,Date.now()));});
+document.querySelector('#gpx').addEventListener('change',async e=>{const result=document.querySelector('#route-result');try{const file=e.target.files[0];if(!file)return;if(file.size>2000000)throw Error('Maximum GPX size is 2 MB');const segments=parseGPX(await file.text());result.textContent=`Route length: ${(distance(segments)/1000).toFixed(2)} km across ${segments.length} segment(s). Gaps are not counted. Data stays in this tab.`;}catch(err){result.textContent=err.message;}});
+document.querySelector('#demo-route').onclick=()=>{const route=[[{lat:0,lon:0},{lat:0,lon:.001},{lat:0,lon:.002}]];const result=remaining(route,{lat:0,lon:.001,accuracy:5,at:Date.now()},Date.now());document.querySelector('#route-result').textContent=`Synthetic route: ${distance(route).toFixed(1)} m total. ${result.meters.toFixed(1)} m remaining. ${result.method}`;};
+fetch('./status.json').then(r=>r.json()).then(s=>{document.querySelector('#verified').textContent=`Last verified: ${s.verifiedAt}. Evidence: ${s.evidence}`;}).catch(()=>{document.querySelector('#verified').textContent='Verification record unavailable.';});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').then(()=>navigator.serviceWorker.ready).then(()=>{document.querySelector('#offline').textContent='Offline cache ready. Reopen this page once before disconnecting. Cached verification dates may be older.';}).catch(()=>{document.querySelector('#offline').textContent='Offline caching unavailable in this browser. Typed simulation still works while this tab remains open.';});

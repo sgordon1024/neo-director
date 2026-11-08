@@ -1,4 +1,11 @@
 {
-  "verifiedAt": "2026-11-08T01:51:41.222377+00:00",
-  "evidence": "Project documents and static tracker authored. Runtime and browser verification pending."
+  "verifiedAt": "2026-11-08T01:57:55.458432+00:00",
+  "release": "typed-simulator-1",
+  "evidence": "Unit tests and headless Chrome at 390px and 1280px; offline reload and planning; zero browser console errors. See repository evidence for scope and deployment history.",
+  "states": {
+    "typedPrototype": "completed",
+    "hardwareInventory": "in-progress",
+    "speechVision": "planned",
+    "realFlight": "blocked"
+  }
 }

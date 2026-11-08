@@ -1,7 +1,36 @@
 # Architecture
 
-Current: typed browser input → deterministic intent parser → structured proposal → independent safety supervisor → simulation only.
+## Running today
 
-Planned: iPhone headphones → local speech service on Mini → constrained shot planner → safety supervisor → separately gated Linux bridge. Read-only video and telemetry precede any transport capable of actuation. No cloud joystick, arbitrary model-generated code, or model authority over safety policy.
+```text
+Typed request → strict allowlist parser → immutable structured proposal
+                                              ↓
+Synthetic sample → independent safety policy → step-based simulation
 
-Offline route distance uses GPS coordinates and GPX segments with explicit freshness and accuracy limits, never camera guesses. Uploaded route data remains on device and is not published. Mini remains in van; disconnected trail use requires a separate local device design.
+Local GPX → XML validation → segmented haversine length
+Synthetic GPS → freshness/accuracy checks → approximate remaining length
+```
+
+`director.js` is a pure module with no IO or actuator API. `supervise` validates the entire canonical plan independently of the parser, rejects unknown fields and stale/future samples, and permits simulation only. Plans expire after 60 seconds; synthetic telemetry after 5 seconds. Loss or staleness blocks advancement and requires a new proposal. Explicit stop clears the plan. Three manually advanced composition steps represent 24 seconds of proposed footage; no physical trajectory is modeled.
+
+`route.js` rejects malformed/out-of-range coordinates, XML entities and DTDs, missing points and invalid segment structure. GPX uploads are limited to 2 MB. Route length excludes gaps between segments. Remaining distance requires one segment, GPS age at most 10 seconds, reported accuracy at most 30 meters and a nearest route vertex within 100 meters. These conservative demo thresholds are not a navigation certification. Elevation, sparse point interpolation, loop disambiguation and live GPS are not implemented.
+
+The browser UI uses textContent for output, has no analytics or external runtime dependencies, and keeps local file data in memory. The service worker caches only fixed public app assets. It does not cache uploaded files or requests to external domains. Refreshing discards user input. The static app is not a security boundary against a user modifying JavaScript, but no drone interface exists to actuate anything.
+
+## Intended later architecture
+
+```text
+Headphones ↔ iPhone companion ↔ local speech on Mini
+                                  ↓
+                    local vision / shot planner
+                                  ↓ proposal only
+                    independent deterministic supervisor
+                                  ↓ separately gated
+                    optional dedicated Linux bridge
+                                  ↓
+                              DJI Neo 2
+```
+
+Speech, vision, model runtime, companion app and bridge are planned only. The Mini stays in the van, which limits local connectivity on trails. Offline operation requires locally available models and data, not cloud ChatGPT. No cloud joystick or arbitrary model-generated code execution is allowed. Recognition is not obstacle avoidance.
+
+Grounded read-only video and telemetry must come before actuation. Any transport integration changes this architecture's risk and requires separate review and physical/manual takeover. A ground watchdog cannot guarantee stopping after radio loss.

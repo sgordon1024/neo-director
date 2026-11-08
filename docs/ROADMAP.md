@@ -1,10 +1,13 @@
-# Roadmap
+# Roadmap and exit criteria
 
-- Phase 0, in progress: read-only source audit and hardware inventory. Hardware ownership, OS, headphones, iPhone, Linux bridge and storage capabilities remain unverified.
-- Phase 1, in progress: offline typed director, structured plans and simulation; no drone transport.
-- Phase 2, planned: grounded read-only video and telemetry.
-- Phase 3, blocked: landing, takeover, stale telemetry and lost-link validation.
-- Phase 4, blocked: supervised bounded campsite shots after all gates pass.
-- Phase 5, planned: optional vehicle tracking with a separate human pilot.
+| Phase | State | Exit evidence |
+| --- | --- | --- |
+| 0. Inventory and audit | In progress | Bounded source audit complete; physical hardware and field connectivity unverified |
+| 1. Typed offline prototype | Completed | Structured proposals, fail-closed supervisor, simulated sequence, local GPX, automated unit and browser tests |
+| 1b. Headphone conversation | Planned | Local speech/vision runtime, private recorded fixtures, latency and offline tests; no models running today |
+| 2. Grounded observation | Planned | Approved read-only bridge evaluation, video lineage, timestamped telemetry; no motor operations |
+| 3. Safety validation | Blocked | Independently prove landing and stopped motors, physical/manual takeover, stale telemetry rejection and lost-link behavior |
+| 4. Campsite shots | Blocked | All prior gates pass; supervised bounded proposals, safe distance from people and Frank |
+| 5. Moving van | Planned | Separate human pilot while driver drives; separate approvals and validated operating limits |
 
-No numerical completion estimates. Each change must include reproducible evidence and a verification timestamp.
+No numerical completion estimates. Simulation success never counts as hardware proof. Public milestones must carry verification dates and evidence. Updates happen when work is verified, not through an unattended background automation.
