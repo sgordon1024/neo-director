@@ -1,7 +1,7 @@
 {
-  "verifiedAt": "2026-11-08T05:05:07.949565+00:00",
-  "release": "native-simulator-13",
-  "evidence": "Unsigned phone-local iOS simulator prototype: structured compositions and bundled synthetic animal detection verified. Experimental model omitted Frank; independent validation rejects that mismatch. Actual iPhone installation, reliable native conversation, headset and flight remain unverified.",
+  "verifiedAt": "2026-11-08T05:18:42.785434+00:00",
+  "release": "native-brief-contract-14",
+  "evidence": "Native simulator model now preserves exact subject, mood and count for three synthetic briefs, including Frank, behind a bounded input/output contract. 166 native contract assertions and 97 existing tests pass. No microphone, physical iPhone or flight validation.",
   "states": {
     "typedPrototype": "completed",
     "hardwareInventory": "in-progress",

@@ -18,16 +18,29 @@ struct LocalPlan {
  }
 }
 
-extension LocalPlan {
- static func preserves(_ source:String,subject:String,style:String,count:Int)->Bool {
+// Bounded contract, not general language understanding. Unknown or conflicting
+// requests fail closed before invoking the optional generative model.
+struct BriefContract {
+ let plan:LocalPlan
+ init(_ source:String)throws {
   let words=source.lowercased().split{!$0.isLetter && !$0.isNumber}.map(String.init)
   let set=Set(words)
-  if !set.isDisjoint(with:["fly","takeoff","land","follow","chase","driving","moving","launch","ignore","override"]){return false}
-  if set.contains("frank") != (subject=="frank"){return false}
-  if subject=="van" && !set.contains("parked"){return false}
-  for (word,n) in ["two":2,"three":3,"four":4,"five":5,"2":2,"3":3,"4":4,"5":5] {if set.contains(word) && count != n{return false}}
-  if (set.contains("calm") || set.contains("peaceful")) && style != "calm" {return false}
-  if set.contains("dramatic") && style != "dramatic" {return false}
-  return true
+  let allowed:Set<String>=["create","make","please","give","me","some","a","few","of","the","my","our","at","with","and","in","include","shots","shot","compositions","composition","campsite","camp","frank","parked","van","natural","calm","peaceful","dramatic","two","three","four","five","2","3","4","5"]
+  guard !words.isEmpty,source.count<=500,set.isSubset(of:allowed) else{throw NSError(domain:"Unsupported or ambiguous request",code:1)}
+  let counts=Set(words.compactMap{["two":2,"three":3,"four":4,"five":5,"2":2,"3":3,"4":4,"5":5][$0]})
+  let styles=Set(words.compactMap{["natural":"natural","calm":"calm","peaceful":"calm","dramatic":"dramatic"][$0]})
+  guard counts.count<=1,styles.count<=1,!set.isDisjoint(with:["shots","shot","compositions","composition"]) else{throw NSError(domain:"Conflicting or missing brief",code:1)}
+  let camp = !set.isDisjoint(with:["camp","campsite"])
+  let frank=set.contains("frank"),van=set.contains("van")
+  guard !(frank && van),!(camp && van),!van || set.contains("parked"),!set.contains("parked") || van, camp || van else{throw NSError(domain:"Unsupported subject",code:1)}
+  plan=try LocalPlan(subject:frank ? "frank" : van ? "van" : "campsite",style:styles.first ?? "natural",count:counts.first ?? 3)
+ }
+ func matches(subject:String,style:String,count:Int)->Bool {
+  plan.subject==subject && plan.style==style && plan.count==count
+ }
+}
+extension LocalPlan {
+ static func preserves(_ source:String,subject:String,style:String,count:Int)->Bool {
+  (try? BriefContract(source).matches(subject:subject,style:style,count:count)) ?? false
  }
 }

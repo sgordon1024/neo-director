@@ -44,4 +44,4 @@ Review the exact existing network, proposed listener and certificate trust metho
 
 ## Native alternative prototype
 
-An unsigned phone-local simulator prototype now exists. Structured planning and a synthetic animal observation work without a Mini link. Local-model constraint preservation is not yet reliable. See [simulator evidence and remaining gates](IOS-PROTOTYPE.md). This is not a physical-phone release.
+An unsigned phone-local simulator prototype now exists. Structured planning and a synthetic animal observation work without a Mini link. Bounded local-model constraint preservation now passes three synthetic simulator cases, with unsupported input rejected. Unrestricted conversation and physical-phone operation remain unverified. See [simulator evidence and remaining gates](IOS-PROTOTYPE.md). This is not a physical-phone release.
